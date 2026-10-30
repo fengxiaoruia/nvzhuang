@@ -1,0 +1,21 @@
+name: Sync Upstream
+permissions:
+  contents: write
+on:
+  schedule:
+    # 每天 UTC 时间 0点（北京时间早上 8点）运行一次
+    # 你可以修改 cron 表达式来调整频率
+    - cron: '0 0 * * *'
+  # 支持在 GitHub 页面上手动点击运行
+  workflow_dispatch:
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Sync with upstream
+        run: |
+          gh repo sync ${{ github.repository }} -b main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
